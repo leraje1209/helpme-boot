@@ -51,6 +51,7 @@ public class MypageController {
 
 	@GetMapping("/mypage") public String
   modify(HttpServletRequest request, Model model,HttpSession session) throws Exception {
+
   
 	  MemberVO login = (MemberVO) request.getSession().getAttribute("member");
 		if (login != null) {

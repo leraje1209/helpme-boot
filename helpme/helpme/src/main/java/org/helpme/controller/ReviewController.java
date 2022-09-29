@@ -9,6 +9,7 @@ import org.helpme.domain.ReviewVO;
 import org.helpme.service.ReviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +19,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@Controller
+@RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/review")
 @RequiredArgsConstructor
 @Slf4j
 public class ReviewController {
+
 
     private ReviewService service;
 

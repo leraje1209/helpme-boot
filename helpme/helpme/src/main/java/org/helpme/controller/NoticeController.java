@@ -1,6 +1,8 @@
 package org.helpme.controller;
 
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.helpme.domain.NoticeVO;
 import org.helpme.domain.PageMaker;
 import org.helpme.domain.SearchCriteria;
@@ -9,24 +11,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.inject.Inject;
 
 @Controller
-@RequestMapping("/notice/*")
+@RequiredArgsConstructor
+@Slf4j
 public class NoticeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 
-	@Inject
 	 private NoticeService service;
 	
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@GetMapping("/list")
 	  public void listPage(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
 
 	    logger.info(cri.toString());
@@ -43,14 +41,14 @@ public class NoticeController {
 	    model.addAttribute("pageMaker", pageMaker);
 	  }
 
-	  @RequestMapping(value = "/read", method = RequestMethod.GET)
+	  @GetMapping("/read")
 	  public void read(@RequestParam("noticeId") int noticeId, @ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
 
 	    model.addAttribute(service.read(noticeId));
 	  }
 		  
 	
-	  @RequestMapping(value = "/remove", method = RequestMethod.GET)
+	  @GetMapping("/remove")
 	  public String remove(@RequestParam("noticeId") int noticeId, SearchCriteria cri, RedirectAttributes rttr) throws Exception {
 
 	    service.remove(noticeId);
@@ -64,13 +62,13 @@ public class NoticeController {
 	    return "redirect:/notice/list";
 	  }
 
-	  @RequestMapping(value = "/modify", method = RequestMethod.GET)
+	  @GetMapping("/modify")
 	  public void modifyGET(int noticeId,@ModelAttribute("cri") SearchCriteria cri,  Model model) throws Exception {
 
 	    model.addAttribute(service.read(noticeId));
 	  }
 
-	  @RequestMapping(value = "/modify", method = RequestMethod.POST)
+	  @PostMapping("/modify")
 	  public String modifyPOST(NoticeVO notice,  SearchCriteria cri, RedirectAttributes rttr) throws Exception {
 
 	    
@@ -89,13 +87,13 @@ public class NoticeController {
 	    return "redirect:/notice/list";
 	  }
 
-	  @RequestMapping(value = "/register", method = RequestMethod.GET)
+	  @GetMapping("/register")
 	  public void registGET() throws Exception {
 
 	    logger.info("regist get ...........");
 	  }
 
-	  @RequestMapping(value = "/register", method = RequestMethod.POST)
+	  @PostMapping("/register")
 	  public String registPOST(NoticeVO notice, RedirectAttributes rttr) throws Exception {
 
 	    logger.info("regist post ...........");

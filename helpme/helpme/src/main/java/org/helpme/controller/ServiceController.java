@@ -36,6 +36,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
+@RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/service/*")
 @RequiredArgsConstructor
 @Slf4j
@@ -53,6 +55,7 @@ public class ServiceController {
         System.out.println("keyword=" + cri.getKeyword());
         model.addAttribute("list", serviceS.listSearchCriteria(cri));
 
+
         PageMaker pageMaker = new PageMaker();
         pageMaker.setCri(cri);
 
@@ -60,6 +63,7 @@ public class ServiceController {
 
         model.addAttribute("pageMaker", pageMaker);
     }
+
 
     @PostMapping("/detail")
     public void read(@RequestParam("sNo") int sNo, @ModelAttribute("cri") SearchCriteria cri, Model model,
@@ -180,6 +184,7 @@ public class ServiceController {
 
     @GetMapping("/newService")
     public void registGET(HttpSession session, Model model) throws Exception {
+
 
 //		logger.info("regist get ...........");
 //
@@ -321,11 +326,13 @@ public class ServiceController {
 
         try {
 
+
             String formatName = fileName.substring(fileName.lastIndexOf(".") + 1);
 
-            MediaType mType = MediaUtils.getMediaType(formatName);
 
+            MediaType mType = MediaUtils.getMediaType(formatName);
             HttpHeaders headers = new HttpHeaders();
+
 
             in = new FileInputStream(uploadPath + "/detail/" + fileName);
 
@@ -349,6 +356,7 @@ public class ServiceController {
         }
         return entity;
     }
+
 
     private String uploadFile(String originalName, byte[] fileData) throws Exception {
 
@@ -493,6 +501,7 @@ public class ServiceController {
         }
         return entity;
     }
+
 
 
 }
