@@ -3,6 +3,7 @@ package org.helpme.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+
 import org.helpme.domain.*;
 import org.helpme.service.MypageService;
 import org.helpme.service.ServiceService;
@@ -16,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -48,9 +48,10 @@ public class MypageController {
 
 	// 회원 정보 조회 
 
-	
-  @GetMapping("/mypage") public void
-  modify(HttpServletRequest request, Model model,HttpSession session, RedirectAttributes rttr) throws Exception {
+
+	@GetMapping("/mypage") public String
+  modify(HttpServletRequest request, Model model,HttpSession session) throws Exception {
+
   
 	  MemberVO login = (MemberVO) request.getSession().getAttribute("member");
 		if (login != null) {
@@ -61,11 +62,13 @@ public class MypageController {
 			
 			PointVO pointVO = service.selectMyPoint(userId);
 			model.addAttribute("point", pointVO);
-			
+
+			return "/my/mypage";
 		}
 		else {
 			model.addAttribute("member", null);
 			model.addAttribute("point", null);
+			return "/my/mypage";
 		}
 
 		
