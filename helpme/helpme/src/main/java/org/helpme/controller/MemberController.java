@@ -123,7 +123,9 @@ public class MemberController {
 	}
 
 	// 세션 만들기
+
 	@PostMapping("/index")
+
 	public String loginPOST(LoginDTO dto, HttpServletRequest request, HttpSession session, Model model, RedirectAttributes rttr)
 			throws Exception {
 		

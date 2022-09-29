@@ -1,39 +1,38 @@
 package org.helpme.controller;
 
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.helpme.domain.MemberVO;
 import org.helpme.service.AdminMemberService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+
 @Controller
-@RequestMapping(value = "/admin/*")
+@RequiredArgsConstructor
+@Slf4j
 public class AdminMemeberController {
 
 	private static final Logger logger = LoggerFactory.getLogger(AdminMemeberController.class);
-	
-	@Inject
+
 	  private AdminMemberService adminMemberService;
 	
 	// 관리자 화면
 	
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@GetMapping("/index")
 	public void getIndex() throws Exception {
 		logger.info("/index"); 
 	}
 
 	// 01. 회원목록보기
-	@RequestMapping(value="/memberList" , method = RequestMethod.GET )
+	@GetMapping("/memberList")
 	public void getMemberList(Model model) throws Exception {
 		logger.info("get member list");
 	//	logger.info(cri.toString());
@@ -55,7 +54,7 @@ public class AdminMemeberController {
 	
 		//03. 회원 상세 조회하기
 		
-	@RequestMapping(value = "/memberView", method = RequestMethod.GET)
+	@GetMapping("/memberView")
 		public void viewMember (@RequestParam("userId") String userId,Model model) throws Exception {
 			logger.info("get member view");
 			
@@ -66,7 +65,7 @@ public class AdminMemeberController {
 		
 
 		//04. 회원 정보 수정하기
-		@RequestMapping(value = "/updateMember", method = RequestMethod.GET)
+		@GetMapping("/updateMember")
 		public void getUpdateMember(@RequestParam("userId") String userId, Model model) throws Exception {
 			// @RequestParam("id")으로 인해, URL주소에 있는 id의 값을 가져와 저장
 			
@@ -78,7 +77,7 @@ public class AdminMemeberController {
 		  }
 		
 		
-		@RequestMapping(value="/updateMember" , method = RequestMethod.POST)
+		@PostMapping("/updateMember")
 	    public String  updateMemberPOST(MemberVO vo , HttpServletRequest req, RedirectAttributes rttr) throws Exception {
 			logger.info("post member modify");
 		
@@ -90,7 +89,7 @@ public class AdminMemeberController {
 			
 		//05. 회원 정보 삭제하기		
 		
-		@RequestMapping(value="/deleteMember" , method = RequestMethod.GET)
+		@GetMapping("/deleteMember")
 		public String deleteMember(@RequestParam("userId") String userId, RedirectAttributes rttr) throws Exception {
 			// @RequestParam("id")으로 인해, URL주소에 있는 id의 값을 가져와 userId에 저장
 			
