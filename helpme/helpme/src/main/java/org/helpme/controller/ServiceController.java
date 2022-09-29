@@ -1,5 +1,7 @@
 package org.helpme.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.helpme.domain.PageMaker;
 import org.helpme.domain.SearchCriteria;
@@ -21,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.*;
@@ -35,6 +36,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
+@RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/service/*")
 public class ServiceController {
 
@@ -43,10 +46,9 @@ public class ServiceController {
 	@Resource(name = "uploadPath")
 	private String uploadPath;
 
-	@Inject
 	private ServiceService serviceS;
 
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	@GetMapping("/list")
 	public void listPage(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
 		System.out.println("keyword=" + cri.getKeyword());
 		model.addAttribute("list", serviceS.listSearchCriteria(cri));
@@ -59,7 +61,7 @@ public class ServiceController {
 		model.addAttribute("pageMaker", pageMaker);
 	}
 
-	@RequestMapping(value = "/detail", method = RequestMethod.GET)
+	@GetMapping("/detail")
 	public void read(@RequestParam("sNo") int sNo, @ModelAttribute("cri") SearchCriteria cri, Model model,
 			HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
@@ -108,7 +110,7 @@ public class ServiceController {
 		
 	}
 
-	@RequestMapping(value = "/remove", method = RequestMethod.GET)
+	@GetMapping("/remove")
 	public String remove(@RequestParam("sNo") int sNo, RedirectAttributes rttr) throws Exception {
 
 		deleteFile(serviceS.read(sNo).getSAttach());
@@ -125,7 +127,7 @@ public class ServiceController {
 		return "redirect:/service/list";
 	}
 
-	@RequestMapping(value = "/modifyForm", method = RequestMethod.GET)
+	@GetMapping("/modifyForm")
 	public void modifyPagingGET(@RequestParam("sNo") int sNo, @ModelAttribute("cri") SearchCriteria cri, Model model)
 			throws Exception {
 
@@ -133,7 +135,7 @@ public class ServiceController {
 		model.addAttribute("serviceAttach", serviceS.getAttach(sNo));
 	}
 
-	@RequestMapping(value = "/modifyForm", method = RequestMethod.POST)
+	@PostMapping("/modifyForm")
 	public String modifyPagingPOST(ServiceVO service,
 			@RequestParam(name = "attachFile", required = false) MultipartFile file,
 			@RequestParam(name = "detailFile", required = false) List<MultipartFile> detailFile,
@@ -176,7 +178,7 @@ public class ServiceController {
 		return "redirect:/service/detail?sNo=" + service.getSNo();
 	}
 
-	@RequestMapping(value = "/newService", method = RequestMethod.GET)
+	@GetMapping("/newService")
 	public void registGET(HttpSession session, Model model) throws Exception {
 
 //		logger.info("regist get ...........");
@@ -186,7 +188,7 @@ public class ServiceController {
 
 	}
 
-	@RequestMapping(value = "/newService", method = RequestMethod.POST)
+	@PostMapping("/newService")
 	public String registPOST(ServiceVO service, @RequestParam(name = "attachFile", required = false) MultipartFile file,
 			@RequestParam(name = "detailFile", required = false) List<MultipartFile> detailFile,
 			RedirectAttributes rttr, HttpServletRequest request) throws Exception {
@@ -217,7 +219,8 @@ public class ServiceController {
 		return "redirect:/service/list";
 	}
 
-	@RequestMapping(value = "/{sNo}", method = { RequestMethod.PUT, RequestMethod.PATCH })
+	@PutMapping("/{sNo}")
+	@PatchMapping("/{sNo}")
 	public ResponseEntity<String> likeIt(@PathVariable("sNo") Integer sNo, HttpServletRequest request)
 			throws Exception {
 
@@ -240,7 +243,7 @@ public class ServiceController {
 		return entity;
 	}
 
-	@RequestMapping(value = "/{sNo}/{price}", method = { RequestMethod.POST })
+	@PostMapping("/{sNo}/{price}")
 	public ResponseEntity<String> purchase(@PathVariable("sNo") Integer sNo, @PathVariable("price") Integer price,
 			HttpServletRequest request) throws Exception {
 
@@ -464,7 +467,8 @@ public class ServiceController {
 		return "";
 	}
 	
-	@RequestMapping(value = "/likeService/{sNo}/{checkNum}", method = { RequestMethod.PUT, RequestMethod.PATCH })
+	@PutMapping("/likeService/{sNo}/{checkNum}")
+	@PatchMapping("/likeService/{sNo}/{checkNum}")
 	public ResponseEntity<String> likeService(@PathVariable("sNo") Integer sNo,
 			@PathVariable("checkNum") Integer checkNum,HttpServletRequest request)
 			throws Exception {

@@ -1,5 +1,7 @@
 package org.helpme.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.helpme.domain.Criteria;
 import org.helpme.domain.PageMaker;
 import org.helpme.domain.RatingVO;
@@ -7,9 +9,9 @@ import org.helpme.domain.ReviewVO;
 import org.helpme.service.ReviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
@@ -17,14 +19,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@Controller
+@RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/review")
 public class ReviewController {
 
-	@Inject
+
 	  private ReviewService service;
 	
-	@RequestMapping(value = "", method = RequestMethod.POST)
+	@PostMapping(value = "")
 	  public ResponseEntity<String> register(@RequestBody ReviewVO reviewVO, HttpServletRequest request) {
 
 	    ResponseEntity<String> entity = null;
@@ -43,7 +47,7 @@ public class ReviewController {
 	    return entity;
 	  }
 	
-	 @RequestMapping(value = "/{sNo}/{page}", method = RequestMethod.GET)
+	 @GetMapping("/{sNo}/{page}")
 	  public ResponseEntity<Map<String, Object>> listPage(
 	      @PathVariable("sNo") Integer sNo,
 	      @PathVariable("page") Integer page) {
@@ -94,7 +98,7 @@ public class ReviewController {
 	    return entity;
 	  }
 	 
-	 @RequestMapping(value = "/{rNo}", method = RequestMethod.DELETE)
+	 @DeleteMapping("/{rNo}")
 	  public ResponseEntity<String> remove(@PathVariable("rNo") Integer rNo) {
 
 	    ResponseEntity<String> entity = null;
@@ -108,7 +112,8 @@ public class ReviewController {
 	    return entity;
 	  }
 	 
-	 @RequestMapping(value = "/{rBoardId}", method = { RequestMethod.PUT, RequestMethod.PATCH })
+	 @PutMapping("/{rBoardId}")
+	 @PatchMapping("/{rBoardId}")
 	  public ResponseEntity<String> modify(@RequestBody ReviewVO reviewVO) {
 
 	    ResponseEntity<String> entity = null;

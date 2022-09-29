@@ -1,5 +1,7 @@
 package org.helpme.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.helpme.domain.*;
 import org.helpme.service.MypageService;
@@ -13,14 +15,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.FileInputStream;
@@ -32,7 +30,8 @@ import java.util.List;
  * Handles requests for the application home page.
  */
 @Controller
-@RequestMapping(value = "/my/*")
+@RequiredArgsConstructor
+@Slf4j
 public class MypageController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MypageController.class);
@@ -40,8 +39,7 @@ public class MypageController {
 	// 이미지 가져오기
 	@Resource(name = "uploadPath")
 	private String uploadPath;
-	
-	@Inject
+
 	private MypageService service;
 
 	/*
@@ -51,7 +49,7 @@ public class MypageController {
 	// 회원 정보 조회 
 
 	
-  @RequestMapping(value = "/mypage", method = RequestMethod.GET) public void
+  @GetMapping("/mypage") public void
   modify(HttpServletRequest request, Model model,HttpSession session, RedirectAttributes rttr) throws Exception {
   
 	  MemberVO login = (MemberVO) request.getSession().getAttribute("member");
@@ -76,7 +74,7 @@ public class MypageController {
 
 	// 거래 내역 보기 -페이징
 
-	@RequestMapping(value = "/mydeal", method = RequestMethod.GET)
+	@GetMapping("/mydeal")
 	public void mydeal(@ModelAttribute("cri") MypageCriteria cri, HttpServletRequest request,Model model)
 			throws Exception {
 
@@ -102,7 +100,7 @@ public class MypageController {
 	}
 
 	// 리뷰 페이징
-	@RequestMapping(value = "/myreview", method = RequestMethod.GET)
+	@GetMapping("/myreview")
 	public void myreview(@ModelAttribute("cri") MypageCriteria cri, HttpServletRequest request,Model model)
 			throws Exception {
 		logger.info(cri.toString());
@@ -173,7 +171,7 @@ public class MypageController {
 	}
 
 	// 찜 목록 페이징
-	@RequestMapping(value = "/likelist", method = RequestMethod.GET)
+	@GetMapping("/likelist")
 	public void likelist(@ModelAttribute("cri") MypageCriteria cri, HttpServletRequest request,Model model)
 			throws Exception {
 		logger.info(cri.toString());
@@ -199,7 +197,7 @@ public class MypageController {
 	}
 
 	// 적립금 조회
-	@RequestMapping(value = "/mypoint", method = RequestMethod.GET)
+	@GetMapping("/mypoint")
 	public void mypoint(HttpServletRequest request, Model model) throws Exception {
 		
 		MemberVO login = (MemberVO) request.getSession().getAttribute("member");
@@ -212,7 +210,7 @@ public class MypageController {
 
 	// 최근 본 서비스
 
-	@RequestMapping(value = "/latestservice", method = RequestMethod.GET)
+	@GetMapping("/latestservice")
 	public void latestservice(@ModelAttribute("cri") MypageCriteria cri,HttpServletRequest request, Model model) throws Exception {
 
 		MemberVO login = (MemberVO) request.getSession().getAttribute("member");

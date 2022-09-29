@@ -1,5 +1,7 @@
 package org.helpme.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.helpme.domain.Criteria;
 import org.helpme.domain.PageMaker;
 import org.helpme.domain.ReplyVO;
@@ -8,23 +10,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@Controller
+@RequiredArgsConstructor
+@Slf4j
 @RequestMapping("/reply/*")
 public class ReplyController {
 	private static final Logger logger = LoggerFactory.getLogger(CommunityController.class);
 	
-	@Inject
+
 	private ReplyService ReplyService;
 	
 	// 댓글 작성
-	@RequestMapping(value = "/replyWrite", method = RequestMethod.POST)
+	@PostMapping("/replyWrite")
 	public ResponseEntity<String> replywrite(@RequestBody ReplyVO ReplyVO) {
 		ResponseEntity<String> entity = null;
 
@@ -39,7 +43,7 @@ public class ReplyController {
 	}
 	
 	// 댓글 전체 보기
-	@RequestMapping(value = "/all/{cBoardId}", method = RequestMethod.GET)
+	@GetMapping("/all/{cBoardId}")
 	public ResponseEntity<List<ReplyVO>> replylist(@PathVariable("cBoardId") Integer cBoardId) {
 		ResponseEntity<List<ReplyVO>> entity = null;
 		try {
@@ -55,7 +59,8 @@ public class ReplyController {
 	
 	
 	// 댓글 수정
-	@RequestMapping(value = "/{replyNo}", method = { RequestMethod.PUT, RequestMethod.PATCH })
+	@PutMapping("/{replyNo}")
+	@PatchMapping("/{replyNo}")
 	public ResponseEntity<String> replymodify(@PathVariable("replyNo") Integer replyNo, @RequestBody ReplyVO ReplyVO) {
 		ResponseEntity<String> entity = null;
 		try {
@@ -71,7 +76,7 @@ public class ReplyController {
 	}
 	
 	// 댓글 삭제
-	@RequestMapping(value = "/{replyNo}", method = RequestMethod.DELETE)
+	@DeleteMapping("/{replyNo}")
 	public ResponseEntity<String> replyremove(@PathVariable("replyNo") Integer replyNo) {
 		ResponseEntity<String> entity = null;
 		try {
@@ -85,7 +90,7 @@ public class ReplyController {
 	}
 	
 	// 댓글 페이지 처리... 모르겠음 ㅠㅠㅠ
-	@RequestMapping(value = "/{cBoardId}/{page}", method = RequestMethod.GET)
+	@GetMapping("/{cBoardId}/{page}")
 	public ResponseEntity<Map<String, Object>> listPage(
 		@PathVariable("cBoardId") Integer cBoardId,
 		@PathVariable("page") Integer page) {
