@@ -38,9 +38,6 @@ import java.util.UUID;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/service/*")
-@RequiredArgsConstructor
-@Slf4j
 public class ServiceController {
 
     private static final Logger logger = LoggerFactory.getLogger(ServiceController.class);

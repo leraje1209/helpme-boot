@@ -22,9 +22,6 @@ import java.util.Map;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/review")
-@RequiredArgsConstructor
-@Slf4j
 public class ReviewController {
 
 
