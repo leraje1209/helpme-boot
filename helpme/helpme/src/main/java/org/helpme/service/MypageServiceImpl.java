@@ -1,5 +1,7 @@
 package org.helpme.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.helpme.domain.MemberVO;
 import org.helpme.domain.MypageCriteria;
 import org.helpme.domain.PointVO;
@@ -10,17 +12,22 @@ import org.helpme.dto.ReviewDTO;
 import org.helpme.mapper.MypageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
+@Transactional
 
 public class MypageServiceImpl implements MypageService {
-	@Autowired
+	//@Autowired
 	private MypageMapper mapper;
 
 	
-	 // 회원 정보 조회 
+	 // 회원 정보 조회
+	 @Override
 	public MemberVO selectId(String userId) throws Exception{ return
 	  mapper.selectId(userId); }
 /*
