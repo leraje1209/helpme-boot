@@ -14,14 +14,7 @@ public interface MypageMapper {
 
 	
 	  public MemberVO selectId(String userId) throws Exception;
-	 
-	 /* public List<DealVO> selectMyDeal(String userId) throws Exception;
-	 * 
-	 * public List<ReviewVO> selectMyReview(String userId) throws Exception;
-	 * 
-	 * public List<QnaVO> selectMyQna(String userId) throws Exception;
 
-	 */
 	
 	// like한 서비스 정보 불러오기
 	public ServiceVO selectMyLikeService(int sNo) throws Exception;

@@ -15,16 +15,7 @@ public interface MypageService {
 
 	  // 회원 정보 조회
 	public MemberVO selectId(String userId) throws Exception;
-	  
-	/* // 거래내역 보기 public List<DealVO> selectMyDeal(String userId) throws Exception;
-	 * 
-	 * // 내가 쓴 후기 public List<ReviewVO> selectMyReview(String userId) throws
-	 * Exception;
-	 * 
-	 * // 1:1 문의 내역 보기 public List<QnaVO> selectMyQna(String userId) throws
-	 * Exception;
-	 * 
-	 */
+
 
 	// like한 서비스 정보 불러오기
 	public ServiceVO selectMyLikeService(int sNo) throws Exception;
