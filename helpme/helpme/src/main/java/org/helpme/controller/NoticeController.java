@@ -18,92 +18,94 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/notice/*")
 public class NoticeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(NoticeController.class);
 
-	 private NoticeService service;
-	
+
+	private NoticeService service;
+
 	@GetMapping("/list")
-	  public void listPage(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
+	public void listPage(@ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
 
-	    logger.info(cri.toString());
+		logger.info(cri.toString());
 
-	    // model.addAttribute("list", service.listCriteria(cri));
-	    model.addAttribute("list", service.listSearchCriteria(cri));
+		// model.addAttribute("list", service.listCriteria(cri));
+		model.addAttribute("list", service.listSearchCriteria(cri));
 
-	    PageMaker pageMaker = new PageMaker();
-	    pageMaker.setCri(cri);
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(cri);
 
-	    // pageMaker.setTotalCount(service.listCountCriteria(cri));
-	    pageMaker.setTotalCount(service.listSearchCount(cri));
+		// pageMaker.setTotalCount(service.listCountCriteria(cri));
+		pageMaker.setTotalCount(service.listSearchCount(cri));
 
-	    model.addAttribute("pageMaker", pageMaker);
-	  }
+		model.addAttribute("pageMaker", pageMaker);
+	}
 
-	  @GetMapping("/read")
-	  public void read(@RequestParam("noticeId") int noticeId, @ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
+	@GetMapping("/read")
+	public void read(@RequestParam("noticeId") int noticeId, @ModelAttribute("cri") SearchCriteria cri, Model model) throws Exception {
 
-	    model.addAttribute(service.read(noticeId));
-	  }
-		  
-	
-	  @GetMapping("/remove")
-	  public String remove(@RequestParam("noticeId") int noticeId, SearchCriteria cri, RedirectAttributes rttr) throws Exception {
+		model.addAttribute(service.read(noticeId));
+	}
 
-	    service.remove(noticeId);
-	
-	    rttr.addAttribute("page", cri.getPage());
-	    rttr.addAttribute("perPageNum", cri.getPerPageNum());
-	    rttr.addAttribute("searchType", cri.getSearchType());
-	    rttr.addAttribute("keyword", cri.getKeyword());
-	    rttr.addFlashAttribute("msg", "SUCCESS");
 
-	    return "redirect:/notice/list";
-	  }
+	@GetMapping("/remove")
+	public String remove(@RequestParam("noticeId") int noticeId, SearchCriteria cri, RedirectAttributes rttr) throws Exception {
 
-	  @GetMapping("/modify")
-	  public void modifyGET(int noticeId,@ModelAttribute("cri") SearchCriteria cri,  Model model) throws Exception {
+		service.remove(noticeId);
 
-	    model.addAttribute(service.read(noticeId));
-	  }
+		rttr.addAttribute("page", cri.getPage());
+		rttr.addAttribute("perPageNum", cri.getPerPageNum());
+		rttr.addAttribute("searchType", cri.getSearchType());
+		rttr.addAttribute("keyword", cri.getKeyword());
+		rttr.addFlashAttribute("msg", "SUCCESS");
 
-	  @PostMapping("/modify")
-	  public String modifyPOST(NoticeVO notice,  SearchCriteria cri, RedirectAttributes rttr) throws Exception {
+		return "redirect:/notice/list";
+	}
 
-	    
-	    logger.info(cri.toString());
-	    service.modify(notice);
-	    
-	    rttr.addAttribute("page", cri.getPage());
-	    rttr.addAttribute("perPageNum", cri.getPerPageNum());
-	    rttr.addAttribute("searchType", cri.getSearchType());
-	    rttr.addAttribute("keyword", cri.getKeyword());
-	    
-	    rttr.addFlashAttribute("msg", "SUCCESS");
+	@GetMapping("/modify")
+	public void modifyGET(int noticeId,@ModelAttribute("cri") SearchCriteria cri,  Model model) throws Exception {
 
-	    logger.info(rttr.toString());
-	    
-	    return "redirect:/notice/list";
-	  }
+		model.addAttribute(service.read(noticeId));
+	}
 
-	  @GetMapping("/register")
-	  public void registGET() throws Exception {
+	@PostMapping("/modify")
+	public String modifyPOST(NoticeVO notice,  SearchCriteria cri, RedirectAttributes rttr) throws Exception {
 
-	    logger.info("regist get ...........");
-	  }
 
-	  @PostMapping("/register")
-	  public String registPOST(NoticeVO notice, RedirectAttributes rttr) throws Exception {
+		logger.info(cri.toString());
+		service.modify(notice);
 
-	    logger.info("regist post ...........");
-	    logger.info(notice.toString());
+		rttr.addAttribute("page", cri.getPage());
+		rttr.addAttribute("perPageNum", cri.getPerPageNum());
+		rttr.addAttribute("searchType", cri.getSearchType());
+		rttr.addAttribute("keyword", cri.getKeyword());
 
-	    service.create(notice);
+		rttr.addFlashAttribute("msg", "SUCCESS");
 
-	    rttr.addFlashAttribute("msg", "SUCCESS");
+		logger.info(rttr.toString());
 
-	    return "redirect:/notice/list";
-	  }
-	  
-	  }  
+		return "redirect:/notice/list";
+	}
+
+	@GetMapping("/register")
+	public void registGET() throws Exception {
+
+		logger.info("regist get ...........");
+	}
+
+	@PostMapping("/register")
+	public String registPOST(NoticeVO notice, RedirectAttributes rttr) throws Exception {
+
+		logger.info("regist post ...........");
+		logger.info(notice.toString());
+
+		service.create(notice);
+
+		rttr.addFlashAttribute("msg", "SUCCESS");
+
+		return "redirect:/notice/list";
+	}
+
+}
