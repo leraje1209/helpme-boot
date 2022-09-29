@@ -1,5 +1,7 @@
 package org.helpme.controller;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.helpme.domain.*;
 import org.helpme.dto.LoginDTO;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -30,7 +31,8 @@ import java.util.List;
  * Handles requests for the application home page.
  */
 @Controller
-@RequestMapping(value = "/main")
+@RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
 	private static final Logger logger = LoggerFactory.getLogger(MemberController.class);
@@ -39,11 +41,10 @@ public class MemberController {
 	@Resource(name = "uploadPath")
 	private String uploadPath;
 	
-	
-	@Inject
+
 	private MemberService service;
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	@GetMapping("/login")
 	public void loginGET(@ModelAttribute("dto") LoginDTO dto,HttpServletRequest request) {
 		logger.info("// /main/login");
 		
@@ -59,7 +60,7 @@ public class MemberController {
 		// model.addAttribute("list", list);
 	}
 
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@GetMapping("/index")
 	public String index(@ModelAttribute("cri") Criteria cri, Model model) throws Exception {
 		logger.info(cri.toString());
 		// index 메인 
@@ -101,7 +102,7 @@ public class MemberController {
 		return "/main/index";
 	}
 
-	@RequestMapping(value = "/index", method = RequestMethod.POST)
+	@PostMapping("/index")
 	public String indexPost(Model model) throws Exception {
 
 		// index 메인 
@@ -122,7 +123,7 @@ public class MemberController {
 	}
 
 	// 세션 만들기
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@PostMapping("/index")
 	public String loginPOST(LoginDTO dto, HttpServletRequest request, HttpSession session, Model model, RedirectAttributes rttr)
 			throws Exception {
 		
@@ -146,12 +147,12 @@ public class MemberController {
 		}
 
 	@ResponseBody
-	@RequestMapping(value = "/idCheck", method = RequestMethod.POST)
+	@PostMapping("/idCheck")
 	public int idCheck(String userId) throws Exception {
 		return service.idCheck(userId);
 	}
 
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	@GetMapping("/logout")
 	public String logout(HttpServletRequest request, HttpServletResponse response, HttpSession session,
 			RedirectAttributes rttr) throws Exception {
 
@@ -168,12 +169,12 @@ public class MemberController {
 		return "redirect:"+referer;
 	}
 
-	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	@GetMapping("/register")
 	public void register() {
 
 	}
 
-	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	@PostMapping("/register")
 	public String register(MemberVO member, String userId) throws Exception {
 		
 		int idResult = service.idCheck(userId);
@@ -192,12 +193,12 @@ public class MemberController {
 		return "redirect:/main/login";
 	}
 	
-	@RequestMapping(value="/changePwd", method=RequestMethod.GET)
+	@GetMapping("/changePwd")
 	public String changePwd() throws Exception{
 		return "/main/changePwd";
 	}
 
-	@RequestMapping(value="/pwCheck" , method=RequestMethod.POST)
+	@PostMapping("/pwCheck")
 	@ResponseBody
 	public int pwCheck(MemberVO memberVO, Password password)  throws Exception{
 		
@@ -213,7 +214,7 @@ public class MemberController {
 		    return 1;
 	}
 	
-	@RequestMapping(value="/changePwd" , method=RequestMethod.POST)
+	@PostMapping("/changePwd")
 	public String changePwd(Password password, String userId, RedirectAttributes rttr, HttpSession session) throws Exception{
 				
 		String newPw = password.getNewPw();
@@ -239,7 +240,7 @@ public class MemberController {
 
 	// mypage
 
-	@RequestMapping(value = "/modify", method = RequestMethod.GET)
+	@GetMapping("/modify")
 	public void modify(HttpServletRequest request, RedirectAttributes rttr, Model model) throws Exception {
 		 
 		MemberVO login = (MemberVO) request.getSession().getAttribute("member");
@@ -261,7 +262,7 @@ public class MemberController {
 		
 	}
 
-	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	@PostMapping("/modify")
 	public String modify(MemberVO vo, AccountInfoVO accountVO, RedirectAttributes rttr) throws Exception {
 		
 		service.update(vo);
@@ -283,7 +284,7 @@ public class MemberController {
 
 	
 
-	@RequestMapping(value = "/deleteId", method = RequestMethod.GET)
+	@GetMapping("/deleteId")
 	public String deleteId(@RequestParam("userId") String userId, RedirectAttributes rttr,  HttpSession session) throws Exception {
 		service.delete(userId);
 		session.invalidate();
@@ -336,11 +337,11 @@ public class MemberController {
 		return entity;
 	}
 	
-	@RequestMapping(value = "/findpw", method = RequestMethod.GET)
+	@GetMapping("/findpw")
 	public void findPwGET() throws Exception{
 	}
 
-	@RequestMapping(value = "/findpw", method = RequestMethod.POST)
+	@PostMapping("/findpw")
 	public void findPwPOST(@ModelAttribute MemberVO member, HttpServletResponse response) throws Exception{
 		System.out.println("aaaaA:"+member.getUserId()+"aaaaaa:"+member.getUserEmail());
 		service.findPw(response, member);
